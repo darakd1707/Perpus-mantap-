@@ -12,6 +12,7 @@ public class main {
     LocalDate tanggal = LocalDate.now();
     int pilihbuku = 0;
     int id;
+    int bukupinjaman = 4;
 
     public void tanggal() {
         System.out.println(tanggal);
@@ -57,9 +58,10 @@ public class main {
             System.out.println("");
             System.out.println("Silakan memilih buku");
             pilihbuku = input.nextInt();
-            if (s.getstatus(pilihbuku) == true) {                
-                b.setstok(pilihbuku, b.getstok(pilihbuku) - 1);
+            if (b.getstok(pilihbuku - 1) > 0) {
+                b.setstok(pilihbuku-1, b.getstok(pilihbuku-1) - 1);
                 s.setstatus(pinjam.getidsiswa(pilihbuku), false);
+                bukupinjaman = pilihbuku;
                 System.out.println("");
                 if (pilihbuku == 1) {
                     System.out.println("Anda memilih buku " + b.getnamabuku(pilihbuku - 1));
@@ -80,7 +82,7 @@ public class main {
                     System.out.println("Harga Buku: " + b.getharga(pilihbuku - 1));
                     System.out.println("Stok: " + b.getstok(pilihbuku - 1));
                 }
-            } else if (s.getstatus(pilihbuku) == false) {
+            } else if (!s.getstatus(pinjam.getidsiswa(id)) && pilihbuku == bukupinjaman) {
                 System.out.println("Anda sudah meminjam buku sebelumnya");
             }
 
@@ -168,10 +170,10 @@ public class main {
             System.out.println("Masukkan id buku yang ingin anda kembalikan");
             int balik = input.nextInt();
             if (s.getstatus(pinjam.getidsiswa(id)) == false) {
-                if (pilihbuku == balik) {
-                    b.setstok(pilihbuku, b.getstok(pilihbuku) + 1);
-                    s.setstatus(pinjam.getidsiswa(pilihbuku), true);
+                if (bukupinjaman == balik) {
+                    b.setstok(balik - 1, b.getstok(balik - 1) + 1);
                     System.out.println("Terima kasih telah mengembalikan buku " + b.getnamabuku(balik - 1));
+                    s.setstatus(pinjam.getidsiswa(pilihbuku), true);
                 } else {
                     System.out.println("Buku yang anda kembalikan tidak sesuai");
                     System.out.println("Apakah mau melihat menu lain? [1.ya/2.tidak]");
